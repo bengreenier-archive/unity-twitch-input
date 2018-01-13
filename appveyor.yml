@@ -1,0 +1,19 @@
+clone_folder: .\CIProject
+environment:
+  unity_install_uri: https://netstorage.unity3d.com/unity/a9f86dcd79df/Windows64EditorInstaller/UnitySetup64-2017.3.0f3.exe
+install:
+  - ps: |
+      Invoke-WebRequest -Uri $env:unity_install_uri -OutFile "UnitySetup.exe"
+      .\UnitySetup.exe /S /D=.\UnityInstall
+build_script:
+  - ps: |
+      echo Running Standalone PC Build
+      .\UnityInstall\Editor\Unity.exe -batchmode -nographics -silent-crashes -logFile .\unity.log -projectPath .\CIProject -buildWindowsPlayer .\Artifacts\CIProject.exe -quit
+      if (![System.IO.File]::Exists('.\Artifacts\CIProject.exe')) { type .\unity.log; exit -1; }
+test_script:
+  - ps: |
+      echo Running Editor Tests
+      .\UnityInstall\Editor\Unity.exe -batchmode -nographics -silent-crashes -logFile .\unity.log -projectPath .\CIProject -runEditorTests -editorTestsResultFile .\tests.xml -quit
+      if (![System.IO.File]::Exists('.\tests.xml')) { type .\unity.log; exit -1; }
+      [xml]$tests = Get-Content .\tests.xml
+      echo $tests
