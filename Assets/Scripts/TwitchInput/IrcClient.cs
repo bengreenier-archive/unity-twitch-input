@@ -35,7 +35,7 @@ public class IrcClient : IDisposable
     /// <summary>
     /// Internal tcp client used for connections
     /// </summary>
-    private TcpClient client;
+    private IIrcCommunication client;
 
     /// <summary>
     /// Internal streamreader for the tcp stream
@@ -63,14 +63,15 @@ public class IrcClient : IDisposable
     /// <summary>
     /// Default ctor
     /// </summary>
+    /// <param name="commClient">the underlying communications client</param>
     /// <param name="uri">Uri to connect to</param>
     /// <remarks>
     /// Note, you must call <see cref="Connect"/> to connect
     /// </remarks>
-    public IrcClient(Uri uri)
+    public IrcClient(IIrcCommunication commClient, Uri uri)
     {
         this.Uri = uri;
-        this.client = new TcpClient();
+        this.client = commClient;
     }
 
     /// <summary>

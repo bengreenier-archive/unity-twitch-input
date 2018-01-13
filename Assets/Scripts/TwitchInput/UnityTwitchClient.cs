@@ -21,7 +21,11 @@ public class UnityTwitchClient : MonoBehaviour
 
     private void Start()
     {
-        this.irc = new TwitchIrc(new Uri("irc://irc.twitch.tv:6667"), this.AuthenticationToken.Token, this.Username);
+        this.irc = new TwitchIrc(new TcpIrcCommunication(),
+            new Uri("irc://irc.twitch.tv:6667"),
+            this.AuthenticationToken.Token,
+            this.Username);
+
         this.userMessageQueue = new Queue<string>();
 
         this.irc.Connected += () =>
@@ -36,7 +40,10 @@ public class UnityTwitchClient : MonoBehaviour
 
         this.irc.UserMessage += (string userMessage) =>
         {
-            this.userMessageQueue.Enqueue(userMessage);
+            lock (this.userMessageQueue)
+            {
+                this.userMessageQueue.Enqueue(userMessage);
+            }
         };
 
         this.irc.Connect();
@@ -44,9 +51,12 @@ public class UnityTwitchClient : MonoBehaviour
 
     private void Update()
     {
-        while (this.userMessageQueue.Count > 0)
+        lock (this.userMessageQueue)
         {
-            this.OnUserMessage.Invoke(this.userMessageQueue.Dequeue());
+            while (this.userMessageQueue.Count > 0)
+            {
+                this.OnUserMessage.Invoke(this.userMessageQueue.Dequeue());
+            }
         }
     }
 

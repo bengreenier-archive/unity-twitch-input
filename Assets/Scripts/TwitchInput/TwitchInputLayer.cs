@@ -19,6 +19,7 @@ public class TwitchInputLayer : MonoBehaviour
 
     private Queue<string> commands = new Queue<string>();
     private Dictionary<string, bool> keyStates = new Dictionary<string, bool>();
+    private List<string> updatingKeys = new List<string>();
 
     public void HandleMessage(string userMessage)
     {
@@ -34,7 +35,10 @@ public class TwitchInputLayer : MonoBehaviour
         // TODO(bengreenier): make this configurable
         userMessage = userMessage.ToUpper();
 
-        this.commands.Enqueue(userMessage);
+        lock (this.commands)
+        {
+            this.commands.Enqueue(userMessage);
+        }
 
         Debug.Log("TwitchInputLayer: " + userMessage);
     }
@@ -51,28 +55,59 @@ public class TwitchInputLayer : MonoBehaviour
     
     private void Update()
     {
-        if (this.commands.Count == 0)
+        lock (this.commands)
         {
-            return;
-        }
+            if (this.commands.Count == 0)
+            {
+                return;
+            }
 
-        var command = this.commands.Dequeue();
-        
-        StartCoroutine(this.ResetKey(command));
+            var command = this.commands.Dequeue();
+
+            StartCoroutine(this.UpdateKey(command));
+        }
     }
 
-    private IEnumerator ResetKey(string command)
+    private IEnumerator UpdateKey(string key)
     {
-        Debug.Log("end of frame");
+        // block if a key update is already in progress for this key
+        // until it is complete
+        //while (this.updatingKeys.Contains(key))
+        //{
+        //    yield return null;
+        //}
+
+        //// make the key as in update to block others
+        //lock (this.updatingKeys)
+        //{
+        //    this.updatingKeys.Add(key);
+        //}
+
+        // wait one frame
         yield return new WaitForEndOfFrame();
-        Debug.Log("top of frame");
 
-        //this.keyStates[command] = true;
+        // activate key
+        this.keyStates[key] = true;
 
-        Debug.Log("end of frame");
+        // wait command duration amount of frames
+        for (var i = 0; i < this.CommandDuration; i++)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        // deactivate key
+        this.keyStates[key] = false;
+
+        // wait one frame
         yield return new WaitForEndOfFrame();
-        Debug.Log("top of frame");
 
-        //this.keyStates[command] = false;
+        // remove key state
+        this.keyStates.Remove(key);
+
+        // unblock the key, we're complete
+        //lock (this.updatingKeys)
+        //{
+        //    this.updatingKeys.Remove(key);
+        //}
     }
 }

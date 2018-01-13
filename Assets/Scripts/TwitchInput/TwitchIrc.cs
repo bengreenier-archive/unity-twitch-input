@@ -124,7 +124,7 @@ public class TwitchIrc : IrcClient
     /// <remarks>
     /// see <c>https://dev.twitch.tv/docs/irc</c> for how to get a token
     /// </remarks>
-    public TwitchIrc(Uri uri, string oauthToken, string userName) : base(uri)
+    public TwitchIrc(IIrcCommunication commClient, Uri uri, string oauthToken, string userName) : base(commClient, uri)
     {
         this.globalRateLimit = GlobalRateLimit.None;
         this.messageQueue = new Queue<MessageQueueEntry>();
