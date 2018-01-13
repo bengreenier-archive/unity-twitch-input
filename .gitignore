@@ -1,4 +1,9 @@
 
+# ignore secret assets
+
+*secret.asset
+*secret.asset.meta
+
 # Created by https://www.gitignore.io/api/unity
 
 ### Unity ###
