@@ -12,30 +12,19 @@ public class Test : MonoBehaviour
 
     private void Start()
     {
-        //if (inputLayer.GetKeyDown(KeyCode.W))
-        //{
-        //    Debug.Log("walk forward, pressed");
-        //}
-        //else if (inputLayer.GetKeyUp(KeyCode.W))
-        //{
-        //    Debug.Log("walk forward, released");
-        //}
-
-        StartCoroutine(this.DoWork());
+        // makes testing easier as i focus/unfocus the editor
+        Application.runInBackground = true;
     }
 
-    private int frame = 0;
-
-    private IEnumerator DoWork()
+    private void Update()
     {
-        yield return new WaitForEndOfFrame();
-        Debug.Log("hi" + frame);
-
-        frame++;
-
-        yield return new WaitForEndOfFrame();
-        Debug.Log("hi 2|" + frame);
-
-        frame++;
+        if (inputLayer.GetKeyDown(KeyCode.W))
+        {
+            Debug.Log("walk forward, pressed");
+        }
+        else if (inputLayer.GetKeyUp(KeyCode.W))
+        {
+            Debug.Log("walk forward, released");
+        }
     }
 }

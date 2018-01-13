@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1685e083911ee30438b3903438a773b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AuthenticationToken: {fileID: 11400000, guid: 0109bb3f8ed2c40478bd15215e906ca5,
+  AuthenticationToken: {fileID: 11400000, guid: 4eb50bdc4814125458e73d32899e3f89,
     type: 2}
   Username: unity-twitch-client
   Channel: ben_greenier
