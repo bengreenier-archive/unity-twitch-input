@@ -5,6 +5,7 @@ install:
       Invoke-WebRequest -Uri $env:unity_install_uri -OutFile "UnitySetup.exe"
       .\UnitySetup.exe /S /D=c:\UnityInstall
       while ($(ps | grep UnitySetup | measure).count -gt 0) { sleep 10; ps | grep UnitySetup; }
+      c:\UnityInstall\Editor\Unity.exe -batchmode -nographics -silent-crashes -logFile c:\unity.log -username $env:UNITY_LICENSE_USER -password $env:UNITY_LICENSE_PASS -quit
 build_script:
   - ps: |
       echo Running Standalone PC Build
