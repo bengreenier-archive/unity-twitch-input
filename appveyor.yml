@@ -9,6 +9,7 @@ build_script:
   - ps: |
       echo Running Standalone PC Build
       c:\UnityInstall\Editor\Unity.exe -batchmode -nographics -silent-crashes -logFile c:\unity.log -projectPath $env:APPVEYOR_BUILD_FOLDER -buildWindowsPlayer c:\Artifacts\Build.exe -quit
+      while ($(ps | grep Unity | measure).count -gt 0) { sleep 10; ps | grep Unity; }
       if (![System.IO.File]::Exists('c:\Artifacts\Build.exe')) { echo $LASTEXITCODE; type c:\unity.log; exit -1; }
 test_script:
   - ps: |
