@@ -8,13 +8,13 @@ install:
 build_script:
   - ps: |
       echo Running Standalone PC Build
-      c:\UnityInstall\Editor\Unity.exe -batchmode -nographics -silent-crashes -logFile c:\unity.log -projectPath $env:APPVEYOR_BUILD_FOLDER -buildWindowsPlayer c:\Artifacts\Build.exe -quit
+      c:\UnityInstall\Editor\Unity.exe -batchmode -force-free -nographics -silent-crashes -logFile c:\unity.log -projectPath $env:APPVEYOR_BUILD_FOLDER -buildWindowsPlayer c:\Artifacts\Build.exe -quit
       while ($(ps | grep Unity | measure).count -gt 0) { sleep 10; ps | grep Unity; }
       if (![System.IO.File]::Exists('c:\Artifacts\Build.exe')) { echo $LASTEXITCODE; type c:\unity.log; exit -1; }
 test_script:
   - ps: |
       echo Running Editor Tests
-      c:\UnityInstall\Editor\Unity.exe -batchmode -nographics -silent-crashes -logFile c:\unity.log -projectPath $env:APPVEYOR_BUILD_FOLDER -runEditorTests -editorTestsResultFile c:\tests.xml -quit
+      c:\UnityInstall\Editor\Unity.exe -batchmode -force-free -nographics -silent-crashes -logFile c:\unity.log -projectPath $env:APPVEYOR_BUILD_FOLDER -runEditorTests -editorTestsResultFile c:\tests.xml -quit
       if (![System.IO.File]::Exists('c:\tests.xml')) { type c:\unity.log; exit -1; }
       [xml]$tests = Get-Content c:\tests.xml
       echo $tests
