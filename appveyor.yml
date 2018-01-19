@@ -1,11 +1,17 @@
 environment:
   unity_install_uri: https://netstorage.unity3d.com/unity/a9f86dcd79df/Windows64EditorInstaller/UnitySetup64-2017.3.0f3.exe
+  unity_license_key:
+    secure: jQxtR7ZfRLMjCQ5W/HayxjB5fEwZiVM4kRLN2HTmdtt8xukCUU6n3Ip5kFBwSVmO
+  unity_license_user:
+    secure: YqXgQdqvtk2cQcXQrQdxowpkcD3D0ZVc1A3vne57ySgsp7U/F+RDPBWR+di4h0unuvsVDRNEicb+J07AIgz1ZQ==
+  unity_license_pass:
+    secure: 9JAa44lLTlBFsePdA7khJg==
 install:
   - ps: |
       Invoke-WebRequest -Uri $env:unity_install_uri -OutFile "UnitySetup.exe"
       .\UnitySetup.exe /S /D=c:\UnityInstall
       while ($(ps | grep UnitySetup | measure).count -gt 0) { sleep 10; ps | grep UnitySetup; }
-      c:\UnityInstall\Editor\Unity.exe -batchmode -nographics -silent-crashes -logFile c:\unity.log -serial $env:UNITY_LICENSE_KEY -username $env:UNITY_LICENSE_USER -password $env:UNITY_LICENSE_PASS -quit
+      c:\UnityInstall\Editor\Unity.exe -batchmode -nographics -silent-crashes -logFile c:\unity.log -serial $env:unity_license_key -username $env:unity_license_user -password $env:unity_license_pass -quit
       while ($(ps | grep Unity | measure).count -gt 0) { sleep 10; ps | grep Unity; }
 build_script:
   - ps: |
