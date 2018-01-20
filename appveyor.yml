@@ -1,7 +1,7 @@
 environment:
   unity_install_uri: https://netstorage.unity3d.com/unity/a9f86dcd79df/Windows64EditorInstaller/UnitySetup64-2017.3.0f3.exe
   unity_license_key:
-    secure: jQxtR7ZfRLMjCQ5W/HayxjB5fEwZiVM4kRLN2HTmdtt8xukCUU6n3Ip5kFBwSVmO
+    secure: fEzK1w0OoekfLzGUKkLOCqUSCUNLXRBgpiFwSzd/5p8=
   unity_license_user:
     secure: YqXgQdqvtk2cQcXQrQdxowpkcD3D0ZVc1A3vne57ySgsp7U/F+RDPBWR+di4h0unuvsVDRNEicb+J07AIgz1ZQ==
   unity_license_pass:
