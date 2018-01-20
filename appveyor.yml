@@ -11,8 +11,9 @@ install:
       Invoke-WebRequest -Uri $env:unity_install_uri -OutFile "UnitySetup.exe"
       .\UnitySetup.exe /S /D=c:\UnityInstall
       while ($(ps | grep UnitySetup | measure).count -gt 0) { sleep 10; ps | grep UnitySetup; }
-      c:\UnityInstall\Editor\Unity.exe -batchmode -nographics -silent-crashes -logFile c:\unity.log -serial $env:unity_license_key -username $env:unity_license_user -password $env:unity_license_pass -quit
+      c:\UnityInstall\Editor\Unity.exe -batchmode -nographics -silent-crashes -logFile c:\unity.log -serial $env:unity_license_key -username '$env:unity_license_user' -password '$env:unity_license_pass' -quit
       while ($(ps | grep Unity | measure).count -gt 0) { sleep 10; ps | grep Unity; }
+      type c:\unity.log
 build_script:
   - ps: |
       echo Running Standalone PC Build
